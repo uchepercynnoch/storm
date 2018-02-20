@@ -10,8 +10,10 @@ require_once __DIR__.'/../config/session.php';
 require_once __DIR__.'/../includes/bootstrap.php';
 
 use hotspot\controller\User;
-use hotspot\model\Database;
 use hotspot\model\RouterConnect;
+use hotspot\config\mail;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 $auth_user = new User();
 
@@ -23,319 +25,6 @@ $stmt->execute(array(":user_id"=>$user_id));
 
 $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
 
-if (isset($_POST['submit1']))
-{
-    $id = $userRow['user_id'];
-    $user_name = $_POST['username'];
-    $user_pass = $_POST['password'];
-    $user_owner = $_POST['customer'];
-    $user_shared = $_POST['shared-users'];
-    $getClient = RouterConnect::getRouter()->getClient();
-    $input1 = [];
-    $input2 = [];
-    $data = [];
-    $getUser = $auth_user->runQuery("SELECT * FROM users WHERE user_id = $id");
-    $getUser->execute();
-    $result = $getUser->setFetchMode(PDO::FETCH_ASSOC);
-
-    foreach($getUser->fetchAll() as $k=>$v)
-    {
-        foreach ($v as $item)
-        {
-            $data[] = $item;
-        }
-    }
-    $user_data = $data[2];
-    $user_data_len = strlen($user_data);
-    $rand = mt_rand(25, 225);
-    $user_data_replace = str_replace('.',$rand,$user_data);
-    $user_data_replace.= mt_rand(10,100);
-    $user_data_shuffle = str_shuffle($user_data_replace);
-    $new_user_name = substr($user_data_shuffle,0,$user_data_len);
-
-
-    $user_data2 = $data[3];
-    $new_user_data2 = password_hash($user_data2,PASSWORD_DEFAULT);
-    $new_user_data2_shuffle = str_shuffle($new_user_data2);
-    $new_user_password = substr($new_user_data2_shuffle,0,10);
-
-
-    $insert = $auth_user->registerUser($new_user_name,$new_user_password,$user_owner,$user_shared);
-
-    if ($insert)
-    {
-        $hotspot = RouterConnect::getRouter()->createUser($new_user_name, $new_user_password, $user_owner, $user_shared);
-
-        if ($hotspot == true)
-        {
-            $user = $auth_user->runQuery("SELECT user_name, user_owner FROM hotspot WHERE user_name = :username AND user_owner = :userowner");
-            $user->execute([":username" => $new_user_name, ":userowner" => $user_owner]);
-            $user_row = $user->fetchAll(PDO::FETCH_OBJ);
-            if ($user_row  == true)
-            {
-                foreach ($user_row as $value)
-                {
-                    $input1[] = $value->user_name;
-                    $input2[] = $value->user_owner;
-                }
-            }
-            else
-            {
-                echo 'error';
-            }
-            $data1 = $input1[0];
-            $data2 = $input2[0];
-
-            if ($data1 == true && $data2 == true)
-            {
-                $getClient->sendSync($hotspot->newRequest('create-and-activate-profile', [
-                    'numbers' => $data1,
-                    'customer' => $data2,
-                    'profile' => 'STORM 10G'
-                    ]));
-
-                if ($getClient)
-                {
-                    $hotspot->enable($data1);
-                }
-            }
-        }
-    }
-}else if (isset($_POST['submit2']))
-{
-    $id = $userRow['user_id'];
-    $user_name = $_POST['username'];
-    $user_pass = $_POST['password'];
-    $user_owner = $_POST['customer'];
-    $user_shared = $_POST['shared-users'];
-    $getClient = RouterConnect::getRouter()->getClient();
-    $input1 = [];
-    $input2 = [];
-    $data = [];
-    $getUser = $auth_user->runQuery("SELECT * FROM users WHERE user_id = $id");
-    $getUser->execute();
-    $result = $getUser->setFetchMode(PDO::FETCH_ASSOC);
-
-    foreach($getUser->fetchAll() as $k=>$v)
-    {
-        foreach ($v as $item)
-        {
-            $data[] = $item;
-        }
-    }
-    $user_data = $data[2];
-    $user_data_len = strlen($user_data);
-    $rand = mt_rand(25, 225);
-    $user_data_replace = str_replace('.',$rand,$user_data);
-    $user_data_replace.= mt_rand(10,100);
-    $user_data_shuffle = str_shuffle($user_data_replace);
-    $new_user_name = substr($user_data_shuffle,0,$user_data_len);
-
-
-    $user_data2 = $data[3];
-    $new_user_data2 = password_hash($user_data2,PASSWORD_DEFAULT);
-    $new_user_data2_shuffle = str_shuffle($new_user_data2);
-    $new_user_password = substr($new_user_data2_shuffle,0,10);
-
-
-    $insert = $auth_user->registerUser($new_user_name,$new_user_password,$user_owner,$user_shared);
-
-    if ($insert)
-    {
-        $hotspot = RouterConnect::getRouter()->createUser($new_user_name, $new_user_password, $user_owner, $user_shared);
-
-        if ($hotspot == true)
-        {
-            $user = $auth_user->runQuery("SELECT user_name, user_owner FROM hotspot WHERE user_name = :username AND user_owner = :userowner");
-            $user->execute([":username" => $new_user_name, ":userowner" => $user_owner]);
-            $user_row = $user->fetchAll(PDO::FETCH_OBJ);
-            if ($user_row  == true)
-            {
-                foreach ($user_row as $value)
-                {
-                    $input1[] = $value->user_name;
-                    $input2[] = $value->user_owner;
-                }
-            }
-            else
-            {
-                echo 'error';
-            }
-            $data1 = $input1[0];
-            $data2 = $input2[0];
-
-            if ($data1 == true && $data2 == true)
-            {
-                $getClient->sendSync($hotspot->newRequest('create-and-activate-profile', [
-                    'numbers' => $data1,
-                    'customer' => $data2,
-                    'profile' => 'STORM 20G'
-                ]));
-
-                if ($getClient)
-                {
-                    $hotspot->enable($data1);
-                }
-            }
-        }
-    }
-}else if (isset($_POST['submit3']))
-{
-    $id = $userRow['user_id'];
-    $user_name = $_POST['username'];
-    $user_pass = $_POST['password'];
-    $user_owner = $_POST['customer'];
-    $user_shared = $_POST['shared-users'];
-    $getClient = RouterConnect::getRouter()->getClient();
-    $input1 = [];
-    $input2 = [];
-    $data = [];
-    $getUser = $auth_user->runQuery("SELECT * FROM users WHERE user_id = $id");
-    $getUser->execute();
-    $result = $getUser->setFetchMode(PDO::FETCH_ASSOC);
-
-    foreach($getUser->fetchAll() as $k=>$v)
-    {
-        foreach ($v as $item)
-        {
-            $data[] = $item;
-        }
-    }
-    $user_data = $data[2];
-    $user_data_len = strlen($user_data);
-    $rand = mt_rand(25, 225);
-    $user_data_replace = str_replace('.',$rand,$user_data);
-    $user_data_replace.= mt_rand(10,100);
-    $user_data_shuffle = str_shuffle($user_data_replace);
-    $new_user_name = substr($user_data_shuffle,0,$user_data_len);
-
-
-    $user_data2 = $data[3];
-    $new_user_data2 = password_hash($user_data2,PASSWORD_DEFAULT);
-    $new_user_data2_shuffle = str_shuffle($new_user_data2);
-    $new_user_password = substr($new_user_data2_shuffle,0,10);
-
-
-    $insert = $auth_user->registerUser($new_user_name,$new_user_password,$user_owner,$user_shared);
-
-    if ($insert)
-    {
-        $hotspot = RouterConnect::getRouter()->createUser($new_user_name, $new_user_password, $user_owner, $user_shared);
-
-        if ($hotspot == true)
-        {
-            $user = $auth_user->runQuery("SELECT user_name, user_owner FROM hotspot WHERE user_name = :username AND user_owner = :userowner");
-            $user->execute([":username" => $new_user_name, ":userowner" => $user_owner]);
-            $user_row = $user->fetchAll(PDO::FETCH_OBJ);
-            if ($user_row  == true)
-            {
-                foreach ($user_row as $value)
-                {
-                    $input1[] = $value->user_name;
-                    $input2[] = $value->user_owner;
-                }
-            }
-            else
-            {
-                echo 'error';
-            }
-            $data1 = $input1[0];
-            $data2 = $input2[0];
-
-            if ($data1 == true && $data2 == true)
-            {
-                $getClient->sendSync($hotspot->newRequest('create-and-activate-profile', [
-                    'numbers' => $data1,
-                    'customer' => $data2,
-                    'profile' => 'STORM 30G'
-                ]));
-
-                if ($getClient)
-                {
-                    $hotspot->enable($data1);
-                }
-            }
-        }
-    }
-}else if (isset($_POST['submit4']))
-{
-    $id = $userRow['user_id'];
-    $user_name = $_POST['username'];
-    $user_pass = $_POST['password'];
-    $user_owner = $_POST['customer'];
-    $user_shared = $_POST['shared-users'];
-    $getClient = RouterConnect::getRouter()->getClient();
-    $input1 = [];
-    $input2 = [];
-    $data = [];
-    $getUser = $auth_user->runQuery("SELECT * FROM users WHERE user_id = $id");
-    $getUser->execute();
-    $result = $getUser->setFetchMode(PDO::FETCH_ASSOC);
-
-    foreach($getUser->fetchAll() as $k=>$v)
-    {
-        foreach ($v as $item)
-        {
-            $data[] = $item;
-        }
-    }
-    $user_data = $data[2];
-    $user_data_len = strlen($user_data);
-    $rand = mt_rand(25, 225);
-    $user_data_replace = str_replace('.',$rand,$user_data);
-    $user_data_replace.= mt_rand(10,100);
-    $user_data_shuffle = str_shuffle($user_data_replace);
-    $new_user_name = substr($user_data_shuffle,0,$user_data_len);
-
-
-    $user_data2 = $data[3];
-    $new_user_data2 = password_hash($user_data2,PASSWORD_DEFAULT);
-    $new_user_data2_shuffle = str_shuffle($new_user_data2);
-    $new_user_password = substr($new_user_data2_shuffle,0,10);
-
-
-    $insert = $auth_user->registerUser($new_user_name,$new_user_password,$user_owner,$user_shared);
-
-    if ($insert)
-    {
-        $hotspot = RouterConnect::getRouter()->createUser($new_user_name, $new_user_password, $user_owner, $user_shared);
-
-        if ($hotspot == true)
-        {
-            $user = $auth_user->runQuery("SELECT user_name, user_owner FROM hotspot WHERE user_name = :username AND user_owner = :userowner");
-            $user->execute([":username" => $new_user_name, ":userowner" => $user_owner]);
-            $user_row = $user->fetchAll(PDO::FETCH_OBJ);
-            if ($user_row  == true)
-            {
-                foreach ($user_row as $value)
-                {
-                    $input1[] = $value->user_name;
-                    $input2[] = $value->user_owner;
-                }
-            }
-            else
-            {
-                echo 'error';
-            }
-            $data1 = $input1[0];
-            $data2 = $input2[0];
-
-            if ($data1 == true && $data2 == true)
-            {
-                $getClient->sendSync($hotspot->newRequest('create-and-activate-profile', [
-                    'numbers' => $data1,
-                    'customer' => $data2,
-                    'profile' => 'STORM 40G'
-                ]));
-
-                if ($getClient)
-                {
-                    $hotspot->enable($data1);
-                }
-            }
-        }
-    }
-}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -344,7 +33,6 @@ if (isset($_POST['submit1']))
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="../../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="../../assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
-    <script type="text/javascript" src="../../assets/js/jquery-1.11.3-jquery.min.js"></script>
     <link rel="stylesheet" href="../../assets/css/style.css" type="text/css"  />
     <title>welcome - <?php print($userRow['user_email']); ?></title>
 </head>
@@ -410,23 +98,15 @@ if (isset($_POST['submit1']))
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="" method="post" id="form1">
-                                        <fieldset class="form-group">
-                                            <label for="username">Enter Username</label>
-                                            <input type="text" class="form-control" name="username" value="" id="username" placeholder="Enter Username">
-                                        </fieldset>
-                                        <fieldset class="form-group">
-                                            <label for="password">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                                        </fieldset>
-                                        <input type="hidden" class="form-control" name="shared-users" id="shared-users" value="3" placeholder="Password">
+                                    <form action="../config/payment_config.php" method="post" id="form1">
+                                        <input type="hidden" class="form-control" name="shared-users" id="shared-users" value="3">
                                         <input type="hidden" class="form-control" name="customer" id="customer" value="admin">
-
+                                        <input type="hidden" class="form-control" name="profile" id="profile" value="STORM10G">
+                                        <button type="submit" name="submit1" class="btn btn-primary">Submit</button>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" name="submit1" class="btn btn-primary">Submit</button>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -444,22 +124,13 @@ if (isset($_POST['submit1']))
                                 </div>
                                 <div class="modal-body">
                                     <form action="" method="post" id="form1">
-                                        <fieldset class="form-group">
-                                            <label for="username">Enter Username</label>
-                                            <input type="text" class="form-control" name="username" value="" id="username" placeholder="Enter Username">
-                                        </fieldset>
-                                        <fieldset class="form-group">
-                                            <label for="password">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                                        </fieldset>
                                         <input type="hidden" class="form-control" name="shared-users" id="shared-users" value="3" placeholder="Password">
                                         <input type="hidden" class="form-control" name="customer" id="customer" value="admin">
-
+                                        <button type="submit" name="submit2" class="btn btn-primary">Submit</button>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" name="submit2" class="btn btn-primary">Submit</button>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -477,22 +148,13 @@ if (isset($_POST['submit1']))
                                 </div>
                                 <div class="modal-body">
                                     <form action="" method="post" id="form1">
-                                        <fieldset class="form-group">
-                                            <label for="username">Enter Username</label>
-                                            <input type="text" class="form-control" name="username" value="" id="username" placeholder="Enter Username">
-                                        </fieldset>
-                                        <fieldset class="form-group">
-                                            <label for="password">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                                        </fieldset>
                                         <input type="hidden" class="form-control" name="shared-users" id="shared-users" value="3" placeholder="Password">
                                         <input type="hidden" class="form-control" name="customer" id="customer" value="admin">
-
+                                        <button type="submit" name="submit3" class="btn btn-primary">Submit</button>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" name="submit3" class="btn btn-primary">Submit</button>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -510,22 +172,13 @@ if (isset($_POST['submit1']))
                                 </div>
                                 <div class="modal-body">
                                     <form action="" method="post" id="form1">
-                                        <fieldset class="form-group">
-                                            <label for="username">Enter Username</label>
-                                            <input type="text" class="form-control" name="username" value="" id="username" placeholder="Enter Username">
-                                        </fieldset>
-                                        <fieldset class="form-group">
-                                            <label for="password">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                                        </fieldset>
                                         <input type="hidden" class="form-control" name="shared-users" id="shared-users" value="3" placeholder="Password">
                                         <input type="hidden" class="form-control" name="customer" id="customer" value="admin">
-
+                                        <button type="submit" name="submit4" class="btn btn-primary">Submit</button>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" name="submit4" class="btn btn-primary">Submit</button>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -610,8 +263,9 @@ if (isset($_POST['submit1']))
 
 
                 </div>
+            </div>
+            <script type="text/javascript" src="../../assets/js/jquery-1.11.3-jquery.min.js"></script>
+            <script type="text/javascript" src="../../assets/bootstrap/js/bootstrap.min.js"></script>
 
-                <script src="../../assets/bootstrap/js/bootstrap.min.js"></script>
-
-            </body>
-</html>
+        </body>
+        </html>

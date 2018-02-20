@@ -13,6 +13,7 @@ class ComposerStaticInit9ef9e49693da6615d6ac6339cb2281fa
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
     );
@@ -21,6 +22,10 @@ class ComposerStaticInit9ef9e49693da6615d6ac6339cb2281fa
         'hotspot\\' => 
         array (
             0 => __DIR__ . '/../..' . '/mikrotik/hotspot',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'PHPMailer\\PHPMailer\\' => 
         array (
@@ -31,6 +36,10 @@ class ComposerStaticInit9ef9e49693da6615d6ac6339cb2281fa
     public static $prefixesPsr0 = array (
         'P' => 
         array (
+            'PayPal' => 
+            array (
+                0 => __DIR__ . '/..' . '/paypal/rest-api-sdk-php/lib',
+            ),
             'PEAR2\\Net\\Transmitter\\' => 
             array (
                 0 => __DIR__ . '/..' . '/pear2/net_transmitter/src',
@@ -52,61 +61,12 @@ class ComposerStaticInit9ef9e49693da6615d6ac6339cb2281fa
         ),
     );
 
-    public static $classMap = array (
-        'PEAR2\\Cache\\SHM' => __DIR__ . '/..' . '/pear2/cache_shm/src/PEAR2/Cache/SHM.php',
-        'PEAR2\\Cache\\SHM\\Adapter\\APC' => __DIR__ . '/..' . '/pear2/cache_shm/src/PEAR2/Cache/SHM/Adapter/APC.php',
-        'PEAR2\\Cache\\SHM\\Adapter\\APCu' => __DIR__ . '/..' . '/pear2/cache_shm/src/PEAR2/Cache/SHM/Adapter/APCu.php',
-        'PEAR2\\Cache\\SHM\\Adapter\\Placebo' => __DIR__ . '/..' . '/pear2/cache_shm/src/PEAR2/Cache/SHM/Adapter/Placebo.php',
-        'PEAR2\\Cache\\SHM\\Adapter\\Wincache' => __DIR__ . '/..' . '/pear2/cache_shm/src/PEAR2/Cache/SHM/Adapter/Wincache.php',
-        'PEAR2\\Cache\\SHM\\Exception' => __DIR__ . '/..' . '/pear2/cache_shm/src/PEAR2/Cache/SHM/Exception.php',
-        'PEAR2\\Cache\\SHM\\InvalidArgumentException' => __DIR__ . '/..' . '/pear2/cache_shm/src/PEAR2/Cache/SHM/InvalidArgumentException.php',
-        'PEAR2\\Net\\RouterOS\\Client' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Client.php',
-        'PEAR2\\Net\\RouterOS\\Communicator' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Communicator.php',
-        'PEAR2\\Net\\RouterOS\\DataFlowException' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/DataFlowException.php',
-        'PEAR2\\Net\\RouterOS\\Exception' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Exception.php',
-        'PEAR2\\Net\\RouterOS\\InvalidArgumentException' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/InvalidArgumentException.php',
-        'PEAR2\\Net\\RouterOS\\LengthException' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/LengthException.php',
-        'PEAR2\\Net\\RouterOS\\Message' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Message.php',
-        'PEAR2\\Net\\RouterOS\\NotSupportedException' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/NotSupportedException.php',
-        'PEAR2\\Net\\RouterOS\\ParserException' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/ParserException.php',
-        'PEAR2\\Net\\RouterOS\\Query' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Query.php',
-        'PEAR2\\Net\\RouterOS\\Registry' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Registry.php',
-        'PEAR2\\Net\\RouterOS\\Request' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Request.php',
-        'PEAR2\\Net\\RouterOS\\Response' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Response.php',
-        'PEAR2\\Net\\RouterOS\\ResponseCollection' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/ResponseCollection.php',
-        'PEAR2\\Net\\RouterOS\\RouterErrorException' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/RouterErrorException.php',
-        'PEAR2\\Net\\RouterOS\\Script' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Script.php',
-        'PEAR2\\Net\\RouterOS\\SocketException' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/SocketException.php',
-        'PEAR2\\Net\\RouterOS\\UnexpectedValueException' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/UnexpectedValueException.php',
-        'PEAR2\\Net\\RouterOS\\Util' => __DIR__ . '/..' . '/pear2/net_routeros/src/PEAR2/Net/RouterOS/Util.php',
-        'PEAR2\\Net\\Transmitter\\Exception' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/Exception.php',
-        'PEAR2\\Net\\Transmitter\\FilterCollection' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/FilterCollection.php',
-        'PEAR2\\Net\\Transmitter\\LockException' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/LockException.php',
-        'PEAR2\\Net\\Transmitter\\NetworkStream' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/NetworkStream.php',
-        'PEAR2\\Net\\Transmitter\\SocketException' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/SocketException.php',
-        'PEAR2\\Net\\Transmitter\\Stream' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/Stream.php',
-        'PEAR2\\Net\\Transmitter\\StreamException' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/StreamException.php',
-        'PEAR2\\Net\\Transmitter\\TcpClient' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/TcpClient.php',
-        'PEAR2\\Net\\Transmitter\\TcpServerConnection' => __DIR__ . '/..' . '/pear2/net_transmitter/src/PEAR2/Net/Transmitter/TcpServerConnection.php',
-        'PHPMailer\\PHPMailer\\Exception' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/Exception.php',
-        'PHPMailer\\PHPMailer\\OAuth' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/OAuth.php',
-        'PHPMailer\\PHPMailer\\PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/PHPMailer.php',
-        'PHPMailer\\PHPMailer\\POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/POP3.php',
-        'PHPMailer\\PHPMailer\\SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/SMTP.php',
-        'hotspot\\controller\\Config' => __DIR__ . '/../..' . '/mikrotik/hotspot/controller/Config.php',
-        'hotspot\\controller\\Input' => __DIR__ . '/../..' . '/mikrotik/hotspot/controller/Input.php',
-        'hotspot\\controller\\User' => __DIR__ . '/../..' . '/mikrotik/hotspot/controller/User.php',
-        'hotspot\\model\\Database' => __DIR__ . '/../..' . '/mikrotik/hotspot/model/Database.php',
-        'hotspot\\model\\RouterConnect' => __DIR__ . '/../..' . '/mikrotik/hotspot/model/RouterConnect.php',
-    );
-
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit9ef9e49693da6615d6ac6339cb2281fa::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit9ef9e49693da6615d6ac6339cb2281fa::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit9ef9e49693da6615d6ac6339cb2281fa::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit9ef9e49693da6615d6ac6339cb2281fa::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'hotspot\\' => array($baseDir . '/mikrotik/hotspot'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
 );

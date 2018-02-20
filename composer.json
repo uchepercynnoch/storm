@@ -10,7 +10,8 @@
         "pear2/cache_shm": "*@alpha",
         "pear2/net_transmitter": "*@beta",
         "pear2/net_routeros": "*@beta",
-        "phpmailer/phpmailer": "^6.0"
+        "phpmailer/phpmailer": "^6.0",
+        "paypal/rest-api-sdk-php":"*"
     },
     "autoload": {
         "psr-4": {

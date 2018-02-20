@@ -15,7 +15,7 @@ require_once __DIR__.'/../../../vendor/autoload.php';
 
 class mail
 {
-    public function mail()
+    public function mail($user,$h_uname,$h_upass,$uemail)
     {
         try {
             $mail = new PHPMailer(true);
@@ -54,5 +54,7 @@ class mail
             echo 'Mailer Error: ' . $mail->ErrorInfo;
         }
     }
+
+
 
 }

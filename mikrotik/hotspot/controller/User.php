@@ -14,6 +14,7 @@ class User
 {
 
     private $conn;
+    private $error = false;
 
     public function __construct()
     {
@@ -51,16 +52,18 @@ class User
         }
     }
 
-    public function registerUser($user_name,$user_pass,$user_owner,$user_shared)
+    public function registerUser($id,$user_name,$user_pass,$user_owner,$user_shared,$profile)
     {
         try
         {
-            $stmt = $this->conn->prepare("INSERT INTO hotspot(user_name,user_pass,user_owner,user_shared) 
-                                                    VALUES (:username, :userpass, :userowner, :usershared)");
+            $stmt = $this->conn->prepare("INSERT INTO hotspot(user_id,user_name,user_pass,user_owner,user_shared,user_profile) 
+                                                    VALUES (:uid, :username, :userpass, :userowner, :usershared, :userprofile)");
+            $stmt->bindParam(":uid", $id);
             $stmt->bindParam(":username", $user_name);
             $stmt->bindParam(":userpass", $user_pass);
             $stmt->bindParam(":userowner", $user_owner);
             $stmt->bindParam(":usershared", $user_shared);
+            $stmt->bindParam(":userprofile", $profile);
 
             $stmt->execute();
 
@@ -119,5 +122,10 @@ class User
         session_destroy();
         unset($_SESSION['user_session']);
         return true;
+    }
+
+    public function error()
+    {
+        return $this->error;
     }
 }

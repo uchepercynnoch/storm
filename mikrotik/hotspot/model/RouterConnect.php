@@ -13,17 +13,19 @@ require_once __DIR__.'/../../../vendor/PEAR2_Net_RouterOS-1.0.0b6.phar';
 
 class RouterConnect
 {
-    private $_util;
+    private $_util = null;
     private $_client;
     private $_username;
     private $_secret;
     private $_customer;
     private $_users;
+    private $_error = false;
 
     private static $_connect = null;
 
     private function __construct()
     {
+        $this->_client = null;
         try
         {
             $this->_client = new RouterOS\Client(Config::getConfig('mikrotik/host'), Config::getConfig('mikrotik/user'),
@@ -41,7 +43,7 @@ class RouterConnect
     public static function getRouter()
     {
         if (!isset(self::$_connect)) {
-            self::$_connect = new  self();
+            self::$_connect = new self();
         }
 
         return self::$_connect;
@@ -80,13 +82,32 @@ class RouterConnect
         return $this->_util;
     }
 
-    public function activateUser()
+    public function activateUser($user,$owner,$profile)
     {
-        return $this->_util->enable($this->_username);
+        return $this->_client->sendSync($this->_util->newRequest('create-and-activate-profile', [
+            'numbers' => $user,
+            'customer' => $owner,
+            'profile' => $profile
+        ]));
     }
 
     public function getClient()
     {
         return $this->_client;
+    }
+
+    public function getUtil()
+    {
+        return $this->_util;
+    }
+
+    public function enableUser($user)
+    {
+        return $this->_util->enable($user);
+    }
+
+    public function error()
+    {
+        return $this->_error;
     }
 }
