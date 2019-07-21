@@ -11,10 +11,10 @@ namespace hotspot\model;
 
 class Database
 {
-    private $host = "localhost";
+    private $host = "127.0.0.1";
     private $db_name = "dblogin";
     private $username = "root";
-    private $password = "";
+    private $password = "Karateka@2745";
     public $conn;
 
     public function dbConnection()
